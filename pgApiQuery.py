@@ -9,20 +9,21 @@ import requests
 domain = input("Introduce your company domain: ")
 authorization_token = input("Introduce your authentication token: ")
 
-# AUTHENTICATION TO THE API
-pagerduty_session = requests.Session()
-pagerduty_session.headers.update({'Authorization': 'Token token=' + authorization_token, 'Accept': 'application/vnd.pagerduty=json;version=2'})
-pagerduty_session.get('https://{domain}.pagerduty.com/users')
 
-# ANOTHER AUTHENTICATION METHOD
+# SEARCH TO THE API
+headers = {
+  'Authorization': 'Token token={0}'.format(authorization_token),
+  'Content-type': 'application/json',
+}
+payload = {
+  'status':'resolved'
+}
 
-headers = { 'Authorization': 'Token token={authorization_token}' }
-response = requests.get('https://{domain}.pagerduty.com/api/v1/incidents'), headers=headers)
-print response.status_code
-#pg_api_session = pagerduty_session.get('https://{domain}.pagerduty.com/api/v1/incidents')
-#print(pg_api_session.text)
+r = requests.get(
+  'https://{0}.pagerduty.com/api/v1/incidents'.format(domain),
+  headers=headers,
+  params=payload,
+)
 
-# SEARCH PARAMETERS
-
-#response = requests.get("https://{domain}.pagerduty.com/api/v1/incidents")
-#print(response.status_code)
+print(r.status_code)
+print(r.text)
